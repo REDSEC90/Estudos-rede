@@ -1,10 +1,12 @@
-Ola este repositorio é para fins educacionais!
+###Ola este repositorio é para fins educacionais!
 
-a intencao deste repositorio é criar um script altamente explicativo para criacao
-de um ponto de acesso(WIFI-FALSO) Para fins de estudo de ciberseguranca.
+###a intencao deste repositorio é criar um script altamente explicativo para criacao
 
-para comecar os estudos deve-se configurar primeiramente um wifi.
-usando "dnsmasq" para fornecer ip, e "hostapd" para emular um ponto de acesso.
+###de um ponto de acesso(WIFI-FALSO) Para fins de estudo de ciberseguranca.
+
+###para comecar os estudos deve-se configurar primeiramente um wifi.
+
+###usando "dnsmasq" para fornecer ip, e "hostapd" para emular um ponto de acesso.
 
 ##para configura-los usa-se os comandos abaixo
 
@@ -15,6 +17,7 @@ sudo apt install hostapd dnsmasq
 ##o comando acima talvez nao seja necessario caso ja esteja instalado 
 
 ## os comandos abaixo sao necessarios para...
+
 ##para colocad a interface que iremos usar em modo monitor.
 
 sudo ip link set wlan0 down
