@@ -10,7 +10,7 @@
 
 ##para configura-los usa-se os comandos abaixo
 
-sudo apt updatw
+sudo apt update
 
 sudo apt install hostapd dnsmasq
 
