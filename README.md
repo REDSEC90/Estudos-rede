@@ -1,84 +1,150 @@
-###Ola este repositorio é para fins educacionais!
+Segue a versão aprimorada do README:
 
-###a intencao deste repositorio é criar um script altamente explicativo para criacao
 
-###de um ponto de acesso(WIFI-FALSO) Para fins de estudo de ciberseguranca.
+---
 
-###para comecar os estudos deve-se configurar primeiramente um wifi.
+Introdução
 
-###usando "dnsmasq" para fornecer ip, e "hostapd" para emular um ponto de acesso.
+Este repositório tem fins educacionais e tem como objetivo demonstrar, de forma detalhada, a criação de um script para configurar um ponto de acesso (WiFi falso) para estudos em cibersegurança. A ideia é utilizar as ferramentas dnsmasq (para fornecer IPs) e hostapd (para emular o ponto de acesso).
 
-##para configura-los usa-se os comandos abaixo
 
+---
+
+Pré-requisitos
+
+Antes de iniciar, certifique-se de ter os seguintes pacotes instalados:
+
+hostapd
+
+dnsmasq
+
+
+Caso eles não estejam instalados, utilize os comandos abaixo:
+
+# Atualiza a lista de pacotes disponíveis
 sudo apt update
 
+# Instala o hostapd e o dnsmasq (caso ainda não estejam instalados)
 sudo apt install hostapd dnsmasq
 
-##o comando acima talvez nao seja necessario caso ja esteja instalado 
 
-## os comandos abaixo sao necessarios para...
+---
 
-##para colocad a interface que iremos usar em modo monitor.
+Configurando a Interface de Rede
 
+Para a captura de pacotes e testes, é necessário colocar a interface de rede (neste exemplo, wlan0) no modo monitor. Siga os comandos abaixo:
+
+# Desativa a interface wlan0
 sudo ip link set wlan0 down
 
+# Configura a interface wlan0 para o modo monitor
 sudo iw dev wlan0 set type monitor
 
+# Reativa a interface wlan0
 sudo ip link set wlan0 up
 
-##ative o ponto de acesso com o comando abaixo
 
+---
+
+Ativando o Ponto de Acesso
+
+1. Iniciando o hostapd:
+Utilize o arquivo de configuração hostapd.conf para definir os parâmetros do ponto de acesso.
+
+# Inicia o hostapd utilizando as configurações definidas em hostapd.conf
 sudo hostapd hostapd.conf
 
-##ative o dnsmask
 
+2. Iniciando o dnsmasq:
+Este serviço atribui endereços IP aos dispositivos conectados, conforme definido em dnsmasq.conf.
+
+# Inicia o dnsmasq com o arquivo de configuração especificado
 sudo dnsmasq -C dnsmasq.conf
 
-## VERIFIQUE SE A REDE FOI CRIADA E SE É POSSIVEL IDENTIFICALA PELO NOME(SSID)
 
-##NOME DE REDE: FakeWiFiNetwork
+3. Verificação:
+Confirme que a rede foi criada corretamente e que o SSID está visível.
+Nome da rede (SSID): FakeWiFiNetwork
 
-## APOS ISSO PODEMOS INICIAR COM A TENTATIVA DE CAPTURAR A SENHA DO WIFI.
 
-## temos "aircrack-ng" captura pacotes e tenta quebrar a senha
 
-## e temos ataque de forca bruta com "reaver" entre outros.
 
-### abaixo iremos comecar com aircrack-ng
+---
 
+Captura de Handshakes com Aircrack-ng
+
+Para tentar capturar a senha do WiFi, iniciaremos a captura de handshakes usando o aircrack-ng. Siga os passos:
+
+1. Análise das redes próximas:
+Execute o comando abaixo para listar as redes disponíveis e identificar a FakeWiFiNetwork.
+
+# Lista as redes próximas. Identifique a rede FakeWiFiNetwork e anote seu BSSID.
 sudo airodump-ng wlan0
-#o comando acima faz analise de redes proximas. ache "FakeWiFiNetwork".
 
-## no comando abaixo voce troca "<BSSID>" pelo mac que ira sair do comando de cima.
 
+2. Captura dos handshakes:
+Após identificar o BSSID (endereço MAC) da rede, inicie a captura dos handshakes. Certifique-se de informar o canal correto (no exemplo, canal 6).
+
+# Substitua <BSSID> pelo endereço MAC da rede FakeWiFiNetwork.
+# O comando captura os handshakes salvando-os no arquivo "capture".
 sudo airodump-ng --bssid <BSSID> -c 6 -w capture wlan0
 
-##o comando acima é a parte mais importante.
-
-##ele capura handshakes e espera uma conexao de 4 vias.
-
-# use um celular e se conecte ao wifi com a senha que vc ja tem. assim o seu computador ira capturar
-##é desta maneira que funciona a captura de handshakes.
-##nao se deve fazer o mesmo em wifis reais sem autorizacao
+Dica: Conecte um dispositivo (como um celular) à rede com a senha conhecida para que a captura do handshake ocorra.
 
 
-##abaixo iremos agora fazer o mesmo mas usando WORDLIST.
-##primeiro precisamos criar uma wordlist, usando um script de permutacoes.
-##usaremos "reaver" para fazer o bruteforce
-##antes de usar o reaver. á interface que sera usada deve estar em modo monitor.
-##tambem precisamos saber do mac,interface, e canal que a rede tem.
 
-#apos termos tudo isso iremos executar os seguintes comando abaixo 
+> Atenção: Utilize esses procedimentos apenas em ambientes de teste ou redes para as quais você possua autorização.
 
+
+
+
+---
+
+Ataque de Força Bruta com Reaver Usando uma Wordlist
+
+Para aprofundar os testes, você pode utilizar uma wordlist para realizar um ataque de força bruta com a ferramenta reaver.
+
+1. Preparação:
+
+Crie uma wordlist utilizando um script de permutações ou outra metodologia de sua preferência.
+
+Certifique-se de que a interface wlan0 esteja em modo monitor.
+
+Tenha em mãos os seguintes dados: BSSID, interface e canal da rede.
+
+
+
+2. Execução do Reaver:
+
+# Substitua <BSSID> pelo endereço MAC da rede e <canal> pelo canal correto.
+# -i especifica a interface, -b o BSSID, -c o canal, -P indica o arquivo da wordlist,
+# e -vv ativa a saída detalhada para monitoramento do progresso.
 sudo reaver -i wlan0 -b <BSSID> -c <canal> -P wordlist.txt -vv
 
-##prontinho parabens. agora é só aguardar que o reaver ira mostrar o resultado obtido.
-<CONSIDERACOES EXTREMAMENTE IMPORTANTES.>
-Nao use essas ferramentas em redes reais sem autorizacao. 
-qualquer uso ilegal das ferranentas
-tem suas conseguencias.
-É fundamental sempre obter autorização explícita 
-para realizar qualquer tipo de teste de segurança em redes. 
-O hacking ético deve ser conduzido de forma responsável, 
-respeitando os limites legais e as regras de privacidade. 
-A prática de cybersecurity é voltada para educação e proteção, e não para danos a terceiros.
+
+
+Após iniciar o reaver, aguarde enquanto a ferramenta tenta descobrir a senha e exibe o resultado.
+
+
+---
+
+Considerações Importantes
+
+Ética e Legalidade:
+Nunca utilize estas ferramentas em redes reais sem autorização explícita. Qualquer uso ilegal pode ter consequências sérias.
+
+Responsabilidade:
+O hacking ético deve ser conduzido de forma responsável, sempre respeitando os limites legais e as regras de privacidade. As técnicas apresentadas são para fins educacionais e para promover a segurança da informação.
+
+
+
+---
+
+Este repositório foi desenvolvido para fins educacionais, incentivando a compreensão dos mecanismos envolvidos na segurança de redes WiFi. A prática de cibersegurança deve sempre visar a educação e a proteção, e nunca a violação de direitos ou a invasão de privacidade.
+
+
+---
+
+Espero que este guia detalhado seja útil para seus estudos e experimentos em ambientes controlados e autorizados.
+
+
