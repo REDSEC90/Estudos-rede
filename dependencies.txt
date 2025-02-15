@@ -1,0 +1,4 @@
+wireless-tools
+hostapd
+dnsmasq
+net-tools
