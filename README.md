@@ -1,9 +1,3 @@
-Segue a versão aprimorada do README:
-
-
----
-
-Introdução
 
 Este repositório tem fins educacionais e tem como objetivo demonstrar, de forma detalhada, a criação de um script para configurar um ponto de acesso (WiFi falso) para estudos em cibersegurança. A ideia é utilizar as ferramentas dnsmasq (para fornecer IPs) e hostapd (para emular o ponto de acesso).
 
